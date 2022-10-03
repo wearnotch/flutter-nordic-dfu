@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_nordic_dfu/flutter_nordic_dfu.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() => runApp(MyApp());
 
@@ -52,6 +53,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   void startScan() async{
+
+    await _tryRequestingPermissions();
+
     scanSubscription?.cancel();
     await flutterBlue.stopScan();
     setState(() {
@@ -136,6 +140,38 @@ class _MyAppState extends State<MyApp> {
               });
             },
     );
+  }
+
+  Future<void> _tryRequestingPermissions() async {
+    var perm = Permission.locationWhenInUse;
+    var status = await perm.status;
+    if (!status.isGranted) {
+      await perm.request();
+    }
+
+    perm = Permission.locationAlways;
+    status = await perm.status;
+    if (!status.isGranted) {
+      await perm.request();
+    }
+
+    var permServ = Permission.bluetooth;
+    status = await permServ.status;
+    if (!status.isGranted) {
+      await permServ.request();
+    }
+
+    permServ = Permission.bluetoothScan;
+    status = await permServ.status;
+    if (!status.isGranted) {
+      await permServ.request();
+    }
+
+    permServ = Permission.bluetoothConnect;
+    status = await permServ.status;
+    if (!status.isGranted) {
+      await permServ.request();
+    }
   }
 }
 

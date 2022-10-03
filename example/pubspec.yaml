@@ -13,7 +13,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
-  flutter_blue: ^0.8.0
+  permission_handler:
+
+  flutter_blue:
+    git:
+      url: https://github.com/wearnotch/flutter_blue.git
+      ref: CU-3965dcy-ble-multiple-devices
 
 dev_dependencies:
   flutter_test:
