@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -124,3 +125,4 @@ String getLang(Locale l) => l == null
   : l.countryCode != null && l.countryCode.isEmpty
     ? l.languageCode
     : l.toString();
+*/

@@ -14,10 +14,10 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FlutterBlue flutterBlue = FlutterBlue.instance;
-  StreamSubscription<ScanResult> scanSubscription;
+  StreamSubscription<ScanResult> ?scanSubscription;
   List<ScanResult> scanResults = <ScanResult>[];
   bool dfuRunning = false;
-  int dfuRunningInx;
+  int ?dfuRunningInx;
 
   @override
   void initState() {
@@ -62,16 +62,16 @@ class _MyAppState extends State<MyApp> {
       scanResults.clear();
       scanSubscription = flutterBlue.scan().listen(
         (scanResult) {
-          if (scanResults.firstWhere(
-                  (ele) => ele.device.id == scanResult.device.id,
-                  orElse: () => null) !=
-              null) {
-            return;
+          try {
+            scanResults.firstWhere(
+                    (ele) => ele.device.id == scanResult.device.id);
+
+          } catch(e) {
+            setState(() {
+              /// add result to results if not added
+              scanResults.add(scanResult);
+            });
           }
-          setState(() {
-            /// add result to results if not added
-            scanResults.add(scanResult);
-          });
         },
       );
     });
@@ -192,7 +192,7 @@ class DeviceItem extends StatelessWidget {
 
   final bool isRunningItem;
 
-  DeviceItem({this.scanResult, this.onPress, this.isRunningItem});
+  DeviceItem({required this.scanResult, required this.onPress, required this.isRunningItem});
 
   @override
   Widget build(BuildContext context) {
